@@ -1,6 +1,6 @@
 const { ApolloServer, gql } = require("apollo-server");
 
-const mahasiswa = [
+let mahasiswa = [
   {
     nim: "301200032",
     nama: "Taufik Hidayat",
@@ -20,15 +20,40 @@ const typeDefs = gql`
     prodi: String!
   }
 
+  type DeleteMhs {
+    msg: String!
+    nim: ID!
+  }
+
   type Query {
     mahasiswa: [Mahasiswa]
     mhs(nim: ID): Mahasiswa
   }
+
+  type Mutation {
+    addMhs(nama: String!, nim: ID!, prodi: String!): Mahasiswa!
+    deleteMhs(nim: ID): DeleteMhs
+  }
 `;
+
 const resolvers = {
   Query: {
     mahasiswa: () => mahasiswa,
     mhs: (_, { nim }) => mahasiswa.find((e) => e.nim === nim),
+  },
+  Mutation: {
+    addMhs: (_, args) => {
+      const newUser = args;
+      mahasiswa.push(newUser);
+      return newUser;
+    },
+    deleteMhs: (_, { nim }) => {
+      mahasiswa = mahasiswa.filter((e) => e.nim !== nim);
+      return {
+        msg: 'Data berhasil dihapus!',
+        nim
+      }
+    },
   },
 };
 
