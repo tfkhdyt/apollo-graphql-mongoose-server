@@ -1,23 +1,39 @@
 const { ApolloServer, gql } = require("apollo-server");
+const mongoose = require('mongoose')
 
-let mahasiswa = [
-  {
-    nim: "301200032",
-    nama: "Taufik Hidayat",
-    prodi: "Teknik Informatika",
+const uri = 'mongodb+srv://tfkhdyt:oxsNzDKhjNPDQ@cluster0.pbe5r.mongodb.net/belajar-graphql?retryWrites=true&w=majority'
+
+mongoose.connect(uri, (err) => {
+  if (err) return err
+  console.log('MongoDB is connected...')
+})
+
+const Mahasiswa = mongoose.model('Mahasiswa', {
+  nim: {
+    type: String,
+    required: true
   },
-  {
-    nim: "301200033",
-    nama: "Teja Kusumah",
-    prodi: "Teknik Informatika",
+  nama: {
+    type: String,
+    required: true
   },
-];
+  prodi: {
+    type: String,
+    required: true
+  },
+}, 'mahasiswa')
 
 const typeDefs = gql`
   type Mahasiswa {
     nim: ID!
     nama: String!
     prodi: String!
+  }
+
+  type UpdateMhs {
+    nim: ID!
+    nama: String
+    prodi: String
   }
 
   type DeleteMhs {
@@ -32,29 +48,29 @@ const typeDefs = gql`
 
   type Mutation {
     addMhs(nama: String!, nim: ID!, prodi: String!): Mahasiswa!
+    updateMhs(nim: ID!, nama: String, prodi: String): String
     deleteMhs(nim: ID): DeleteMhs
   }
 `;
 
 const resolvers = {
   Query: {
-    mahasiswa: () => mahasiswa,
-    mhs: (_, { nim }) => mahasiswa.find((e) => e.nim === nim),
+    mahasiswa: async () => await Mahasiswa.find(),
+    mhs: async (_, { nim }) =>
+      await Mahasiswa.findOne({ nim })
   },
   Mutation: {
-    addMhs: (_, args) => {
-      const newUser = args;
-      mahasiswa.push(newUser);
-      return newUser;
+    addMhs: async (_, args) => {
+      const newMhs = args
+      await Mahasiswa.insertMany(args)
+      return newMhs
     },
-    deleteMhs: (_, { nim }) => {
-      mahasiswa = mahasiswa.filter((e) => e.nim !== nim);
-      return {
-        msg: 'Data berhasil dihapus!',
-        nim
-      }
-    },
-  },
+    updateMhs: async (_, args) => {
+      const Mhs = await Mahasiswa.findOne({ nim: args.nim })
+      await Mahasiswa.findByIdAndUpdate(Mhs._id, args)
+      return `[${Mhs.nim}] ${Mhs.nama} berhasil diupdate!`
+    }
+  }
 };
 
 const server = new ApolloServer({ typeDefs, resolvers });
