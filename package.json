@@ -10,10 +10,15 @@
     "mongoose": "^6.1.3"
   },
   "scripts": {
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "lint": "prettier -cw ./{config,models,schema,utils}/**/*.js && eslint ./{config,models,schema,utils}/**/*.js"
   },
   "devDependencies": {
     "eslint": "^8.5.0",
     "prettier": "^2.5.1"
+  },
+  "prettier": {
+    "semi": false,
+    "single-quote": true
   }
 }
