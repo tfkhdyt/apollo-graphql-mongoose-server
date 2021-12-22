@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 module.exports = mongoose.model(
-  "Mahasiswa",
+  'Mahasiswa',
   {
     nim: {
       type: String,
@@ -16,5 +16,5 @@ module.exports = mongoose.model(
       required: true,
     },
   },
-  "mahasiswa"
-);
+  'mahasiswa'
+)

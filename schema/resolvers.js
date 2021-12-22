@@ -1,8 +1,8 @@
-const addMhs = require('../utils/mutation/addMhs');
-const deleteMhs = require('../utils/mutation/deleteMhs');
-const updateMhs = require('../utils/mutation/updateMhs');
-const getAllMhs = require('../utils/query/getAllMhs');
-const getMhsByNim = require('../utils/query/getMhsByNim');
+const addMhs = require('../utils/mutation/addMhs')
+const deleteMhs = require('../utils/mutation/deleteMhs')
+const updateMhs = require('../utils/mutation/updateMhs')
+const getAllMhs = require('../utils/query/getAllMhs')
+const getMhsByNim = require('../utils/query/getMhsByNim')
 
 module.exports = {
   Query: {
@@ -13,6 +13,6 @@ module.exports = {
   Mutation: {
     addMhs: addMhs,
     updateMhs: updateMhs,
-    deleteMhs: deleteMhs 
+    deleteMhs: deleteMhs,
   },
-};
+}

@@ -17,4 +17,4 @@ module.exports = gql`
     updateMhs(nim: ID!, nama: String, prodi: String): Mahasiswa
     deleteMhs(nim: ID): Mahasiswa
   }
-`;
+`
